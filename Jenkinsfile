@@ -24,10 +24,11 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build the Docker image using the Dockerfile in the repository
-                    docker.build(DOCKER_IMAGE, '.')
-                }
+                sh """
+                                            kaniko --context=dir://$(pwd) \
+                                                   --dockerfile=$(pwd)/Dockerfile \
+                                                   --destination=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+                                        """
             }
         }
 
